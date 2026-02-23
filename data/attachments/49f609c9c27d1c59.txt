@@ -1,0 +1,1 @@
+Reset button is accessible to customers, violating Transaction Security acceptance criteria
