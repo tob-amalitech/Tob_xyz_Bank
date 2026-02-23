@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+
+  # ── Selenium Grid Hub ──────────────────────────────────────────
+  selenium-hub:
+    image: selenium/hub:4.18.1
+    container_name: selenium-hub
+    ports:
+      - "4444:4444"   # Grid console: http://localhost:4444
+      - "4442:4442"
+      - "4443:4443"
+    networks:
+      - selenium-grid
+
+  # ── Chrome Node ─────────────────────────────────────────────────
+  chrome-node:
+    image: selenium/node-chrome:4.18.1
+    container_name: chrome-node
+    depends_on:
+      - selenium-hub
+    environment:
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - SE_NODE_MAX_SESSIONS=3
+      - SE_NODE_OVERRIDE_MAX_SESSIONS=true
+      - VNC_NO_PASSWORD=1
+    ports:
+      - "7900:7900"   # noVNC live view: http://localhost:7900
+    networks:
+      - selenium-grid
+    shm_size: '2gb'   # Chrome needs shared memory to avoid crashes
+
+  # ── Test Runner ─────────────────────────────────────────────────
+  test-runner:
+    build:
+      context: .
+      target: build
+    container_name: test-runner
+    depends_on:
+      - chrome-node
+    environment:
+      - SELENIUM_GRID_URL=http://selenium-hub:4444/wd/hub
+      - HEADLESS=true
+    volumes:
+      - allure-results:/app/target/allure-results
+      - surefire-reports:/app/target/surefire-reports
+    networks:
+      - selenium-grid
+
+volumes:
+  allure-results:
+  surefire-reports:
+
+networks:
+  selenium-grid:
+    driver: bridge
