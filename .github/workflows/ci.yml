@@ -21,6 +21,13 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
+    outputs:
+      total:   ${{ steps.test_summary.outputs.total }}
+      passed:  ${{ steps.test_summary.outputs.passed }}
+      failed:  ${{ steps.test_summary.outputs.failed }}
+      skipped: ${{ steps.test_summary.outputs.skipped }}
+      result:  ${{ steps.test_summary.outputs.result }}
+
     steps:
       # ── 1. Checkout ───────────────────────────────────────────
       - name: Checkout code
