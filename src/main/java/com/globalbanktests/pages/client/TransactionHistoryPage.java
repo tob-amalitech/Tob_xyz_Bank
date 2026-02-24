@@ -18,6 +18,12 @@ public class TransactionHistoryPage extends AbstractPage {
     @FindBy(xpath = "//button[contains(text(),'Transactions')]")
     private WebElement transactionsTabBtn;
 
+    @FindBy(id = "start")
+    private WebElement startDateInput;
+
+    @FindBy(id = "end")
+    private WebElement endDateInput;
+
     @FindBy(xpath = "//button[contains(text(),'Reset')]")
     private WebElement resetHistoryBtn;
 
@@ -85,6 +91,18 @@ public class TransactionHistoryPage extends AbstractPage {
         return false;
     }
 
+
+    public void filterByDate(String start, String end) {
+        startDateInput.clear();
+        startDateInput.sendKeys(start);
+
+        endDateInput.clear();
+        endDateInput.sendKeys(end);
+
+        // Click filter if needed
+        // filterButton.click();
+    }
+
     /**
      * Returns true if the Reset button is currently displayed.
      */
@@ -93,3 +111,4 @@ public class TransactionHistoryPage extends AbstractPage {
         return isElementVisible(resetHistoryBtn);
     }
 }
+

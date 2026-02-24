@@ -31,7 +31,7 @@ public class ClientPortalPage extends AbstractPage {
     @FindBy(xpath = "//button[contains(text(),'Transactions')]")
     private WebElement transactionsBtn;
 
-    @FindBy(css = ".center strong")
+    @FindBy(xpath = "//div[contains(@class,'center')]//strong[2]")
     private WebElement balanceDisplay;
 
     public ClientPortalPage(WebDriver driver) {

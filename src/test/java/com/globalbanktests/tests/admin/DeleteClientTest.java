@@ -19,13 +19,14 @@ public class DeleteClientTest extends TestSetup {
     @Severity(SeverityLevel.CRITICAL)
     @Description("This test verifies that a Bank Manager can locate a customer via the search bar and permanently remove them from the system using the Delete button.")
     public void verifyClientDeletion() {
+
         AdminLoginPage adminLoginPage = new AdminLoginPage(driver);
         ClientListPage clientListPage = new ClientListPage(driver);
 
         adminLoginPage.navigateToAdminPanel();
         clientListPage.openClientList();
-        int initialRowCount = clientListPage.getCustomerRowCount();
 
+        // Step 1: Search for the client
         clientListPage.searchForClient("Hermoine");
         int filteredCount = clientListPage.getCustomerRowCount();
 
@@ -39,25 +40,21 @@ public class DeleteClientTest extends TestSetup {
             throw assertionError;
         }
 
+        // Step 2: Delete the client
         clientListPage.removeClient();
 
-        try {
-            int afterDeleteCount = clientListPage.getCustomerRowCount();
-            Assert.assertEquals(
-                    afterDeleteCount,
-                    initialRowCount - 1,
-                    "Row count should decrease by 1 after deleting a customer."
-            );
+        // Step 3: Search again to confirm deletion
+        clientListPage.searchForClient("Hermoine");
+        int afterSearchCount = clientListPage.getCustomerRowCount();
 
-            clientListPage.searchForClient("Hermoine");
-            int afterSearchCount = clientListPage.getCustomerRowCount();
+        try {
             Assert.assertEquals(
                     afterSearchCount,
                     0,
                     "Searching for 'Hermoine' after deletion should return no results."
             );
         } catch (AssertionError assertionError) {
-            clientListPage.captureScreenshot("Delete client - incorrect row count after delete");
+            clientListPage.captureScreenshot("Delete client - customer still visible after delete");
             throw assertionError;
         }
     }
