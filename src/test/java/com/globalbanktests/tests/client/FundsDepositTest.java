@@ -22,7 +22,6 @@ public class FundsDepositTest extends TestSetup {
     @Severity(SeverityLevel.CRITICAL)
     @TmsLink("TC-003")
     public void verifySuccessfulDeposit() {
-
         ClientPortalPage clientPortalPage = new ClientPortalPage(driver);
         FundsDepositPage fundsDepositPage = new FundsDepositPage(driver);
 
@@ -47,7 +46,7 @@ public class FundsDepositTest extends TestSetup {
         );
     }
 
-    @Test(priority = 2, description = "Verify negative deposit amounts are rejected")
+    @Test(priority = 2, description = "Verify negative deposit amounts are rejected (balance remains unchanged)")
     @Story("Deposit Funds - Negative Validation")
     @Severity(SeverityLevel.NORMAL)
     @Issue("BUG-003")
@@ -60,16 +59,23 @@ public class FundsDepositTest extends TestSetup {
         clientPortalPage.enterClientPortal();
         clientPortalPage.loginAsCustomer(CUSTOMER_NAME);
 
+        // Capture balance before negative deposit
+        int startingBalance = clientPortalPage.getCurrentBalance();
+
+        // Attempt negative deposit
         fundsDepositPage.makeDeposit("-100");
-        String negativeMessage = fundsDepositPage.getTransactionMessage();
 
-        Allure.addAttachment("BUG-003 Actual Deposit Message", negativeMessage);
+        // Capture balance after attempt
+        int afterBalance = clientPortalPage.getCurrentBalance();
 
-        boolean negativeAccepted = negativeMessage.toLowerCase().contains("deposit successful");
+        // Screenshot for Allure reporting
+        fundsDepositPage.captureScreenshot("Negative deposit attempt");
 
-        Assert.assertFalse(
-                negativeAccepted,
-                "Negative deposit amounts should be rejected, but application indicates success."
+        // Assert balance did NOT change
+        Assert.assertEquals(
+                afterBalance,
+                startingBalance,
+                "Balance should not change when attempting a negative deposit."
         );
     }
 }
