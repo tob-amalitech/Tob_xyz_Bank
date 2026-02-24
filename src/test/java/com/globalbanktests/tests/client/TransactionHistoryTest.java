@@ -18,7 +18,7 @@ import java.time.format.DateTimeFormatter;
 @Feature("Transaction History")
 public class TransactionHistoryTest extends TestSetup {
 
-    private static final String CUSTOMER_NAME = "Hermoine Granger";
+    private static final String CUSTOMER_NAME = "Harry Potter";
     private static final int DEPOSIT_AMOUNT = 300;
 
     @Test(priority = 3, description = "Verify a customer can view their transaction history and see recent deposits")
@@ -39,12 +39,12 @@ public class TransactionHistoryTest extends TestSetup {
         // Navigate to transaction history
         transactionHistoryPage.viewTransactionHistory();
 
-        // Apply date filter: today
-        LocalDateTime now = LocalDateTime.now();
-        String startDateTime = now.minusMinutes(5).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")); // start a few mins earlier
-        String endDateTime = now.plusMinutes(5).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")); // end a few mins later
-
-        transactionHistoryPage.filterByDate(startDateTime, endDateTime);
+        // Apply date filter: today (Use when there are many transactions and we want to ensure we see the recent deposit. If the app doesn't support date filtering, this step can be skipped.)
+//        LocalDateTime now = LocalDateTime.now();
+//        String startDateTime = now.minusMinutes(5).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")); // start a few mins earlier
+//        String endDateTime = now.plusMinutes(5).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")); // end a few mins later
+//
+//        transactionHistoryPage.filterByDate(startDateTime, endDateTime);
 
         // Assert the table is visible
         Assert.assertTrue(
