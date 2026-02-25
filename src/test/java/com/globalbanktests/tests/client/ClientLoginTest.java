@@ -2,6 +2,8 @@ package com.globalbanktests.tests.client;
 
 import com.globalbanktests.base.TestSetup;
 import com.globalbanktests.pages.client.ClientPortalPage;
+import com.globalbanktests.tests.support.TestDataLoader;
+import com.fasterxml.jackson.databind.JsonNode;
 import io.qameta.allure.*;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -20,6 +22,9 @@ public class ClientLoginTest extends TestSetup {
     public void verifyCustomerLogin() throws InterruptedException {
         ClientPortalPage clientPortalPage = new ClientPortalPage(driver);
 
+        JsonNode customerNode = TestDataLoader.data().path("customer");
+        String customerName = customerNode.path("defaultCustomerName").asText();
+
         Thread.sleep(2000);
         clientPortalPage.enterClientPortal();
 
@@ -34,7 +39,7 @@ public class ClientLoginTest extends TestSetup {
         }
 
         Thread.sleep(2000);
-        clientPortalPage.loginAsCustomer("Hermoine Granger");
+        clientPortalPage.loginAsCustomer(customerName);
 
         try {
             Assert.assertTrue(

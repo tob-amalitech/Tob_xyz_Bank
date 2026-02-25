@@ -4,6 +4,8 @@ import com.globalbanktests.base.TestSetup;
 import com.globalbanktests.pages.client.ClientPortalPage;
 import com.globalbanktests.pages.client.FundsDepositPage;
 import com.globalbanktests.pages.client.TransactionHistoryPage;
+import com.globalbanktests.tests.support.TestDataLoader;
+import com.fasterxml.jackson.databind.JsonNode;
 import io.qameta.allure.*;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
@@ -27,13 +29,17 @@ public class TransactionResetTest extends TestSetup {
         TransactionHistoryPage transactionHistoryPage = new TransactionHistoryPage(driver);
         SoftAssert softAssert = new SoftAssert();
 
+        JsonNode customerNode = TestDataLoader.data().path("customer");
+        String customerName = customerNode.path("defaultCustomerName").asText();
+        int seedAmount = customerNode.path("deposit").path("transactionResetAmount").asInt();
+
         holdFor(1500);
         clientPortalPage.enterClientPortal();
         holdFor(1000);
-        clientPortalPage.loginAsCustomer("Hermoine Granger");
+        clientPortalPage.loginAsCustomer(customerName);
 
         // Ensure history is not empty
-        fundsDepositPage.makeDeposit("200");
+        fundsDepositPage.makeDeposit(String.valueOf(seedAmount));
 
         holdFor(1000);
         transactionHistoryPage.viewTransactionHistory();

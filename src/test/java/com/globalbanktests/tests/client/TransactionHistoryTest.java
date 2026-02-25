@@ -4,12 +4,11 @@ import com.globalbanktests.base.TestSetup;
 import com.globalbanktests.pages.client.ClientPortalPage;
 import com.globalbanktests.pages.client.FundsDepositPage;
 import com.globalbanktests.pages.client.TransactionHistoryPage;
+import com.globalbanktests.tests.support.TestDataLoader;
+import com.fasterxml.jackson.databind.JsonNode;
 import io.qameta.allure.*;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 /**
  * Tests the Transaction History view in the Customer Portal.
@@ -17,9 +16,6 @@ import java.time.format.DateTimeFormatter;
 @Epic("Customer Portal")
 @Feature("Transaction History")
 public class TransactionHistoryTest extends TestSetup {
-
-    private static final String CUSTOMER_NAME = "Harry Potter";
-    private static final int DEPOSIT_AMOUNT = 300;
 
     @Test(priority = 3, description = "Verify a customer can view their transaction history and see recent deposits")
     @Story("View Transaction History - Recent Deposit")
@@ -29,12 +25,16 @@ public class TransactionHistoryTest extends TestSetup {
         FundsDepositPage fundsDepositPage = new FundsDepositPage(driver);
         TransactionHistoryPage transactionHistoryPage = new TransactionHistoryPage(driver);
 
+        JsonNode customerNode = TestDataLoader.data().path("customer");
+        String customerName = customerNode.path("transactionHistoryCustomerName").asText();
+        int depositAmount = customerNode.path("deposit").path("transactionHistoryAmount").asInt();
+
         // Login
         clientPortalPage.enterClientPortal();
-        clientPortalPage.loginAsCustomer(CUSTOMER_NAME);
+        clientPortalPage.loginAsCustomer(customerName);
 
         // Make a deposit
-        fundsDepositPage.makeDeposit(String.valueOf(DEPOSIT_AMOUNT));
+        fundsDepositPage.makeDeposit(String.valueOf(depositAmount));
 
         // Navigate to transaction history
         transactionHistoryPage.viewTransactionHistory();
@@ -54,8 +54,8 @@ public class TransactionHistoryTest extends TestSetup {
 
         // Assert the deposit exists
         Assert.assertTrue(
-                transactionHistoryPage.hasTransaction(String.valueOf(DEPOSIT_AMOUNT), "Credit"),
-                "Transactions table should contain a Credit transaction with amount " + DEPOSIT_AMOUNT + " for today."
+                transactionHistoryPage.hasTransaction(String.valueOf(depositAmount), "Credit"),
+                "Transactions table should contain a Credit transaction with amount " + depositAmount + " for today."
         );
     }
 }

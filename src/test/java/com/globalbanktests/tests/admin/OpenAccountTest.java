@@ -3,6 +3,8 @@ package com.globalbanktests.tests.admin;
 import com.globalbanktests.base.TestSetup;
 import com.globalbanktests.pages.admin.AdminLoginPage;
 import com.globalbanktests.pages.admin.OpenAccountPage;
+import com.globalbanktests.tests.support.TestDataLoader;
+import com.fasterxml.jackson.databind.JsonNode;
 import io.qameta.allure.*;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -27,10 +29,14 @@ public class OpenAccountTest extends TestSetup {
         AdminLoginPage adminLoginPage = new AdminLoginPage(driver);
         OpenAccountPage openAccountPage = new OpenAccountPage(driver);
 
+        JsonNode data = TestDataLoader.data().path("admin").path("openAccount");
+        String customerName = data.path("customerName").asText();
+        String currency = data.path("currency").asText();
+
         adminLoginPage.navigateToAdminPanel();
         openAccountPage.goToOpenAccount();
-        openAccountPage.chooseClient("Hermoine Granger");
-        openAccountPage.chooseCurrency("Dollar");
+        openAccountPage.chooseClient(customerName);
+        openAccountPage.chooseCurrency(currency);
         openAccountPage.confirmAccountCreation();
 
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));

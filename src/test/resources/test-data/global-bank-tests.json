@@ -1,0 +1,40 @@
+{
+  "admin": {
+    "registerValidCustomer": {
+      "firstName": "James",
+      "lastName": "Mensah",
+      "postCode": "12345"
+    },
+    "registerNumericName": {
+      "firstName": "123",
+      "lastName": "Test",
+      "postCode": "12345"
+    },
+    "registerAlphabeticPostcode": {
+      "firstName": "James",
+      "lastName": "Mensah",
+      "postCode": "ABCDE"
+    },
+    "openAccount": {
+      "customerName": "Hermoine Granger",
+      "currency": "Dollar"
+    },
+    "searchCustomerName": "Hermoine"
+  },
+  "customer": {
+    "defaultCustomerName": "Hermoine Granger",
+    "transactionHistoryCustomerName": "Harry Potter",
+    "deposit": {
+      "happyAmount": 500,
+      "negativeAmount": -100,
+      "prepareBalanceAmount": 1000,
+      "transactionHistoryAmount": 300,
+      "transactionResetAmount": 200
+    },
+    "withdrawal": {
+      "validAmount": 200,
+      "insufficientAmount": 999999
+    }
+  }
+}
+

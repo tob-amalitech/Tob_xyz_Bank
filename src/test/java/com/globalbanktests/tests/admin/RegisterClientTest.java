@@ -3,6 +3,8 @@ package com.globalbanktests.tests.admin;
 import com.globalbanktests.base.TestSetup;
 import com.globalbanktests.pages.admin.AdminLoginPage;
 import com.globalbanktests.pages.admin.RegisterClientPage;
+import com.globalbanktests.tests.support.TestDataLoader;
+import com.fasterxml.jackson.databind.JsonNode;
 import io.qameta.allure.*;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -28,9 +30,14 @@ public class RegisterClientTest extends TestSetup {
         AdminLoginPage adminLoginPage = new AdminLoginPage(driver);
         RegisterClientPage registerClientPage = new RegisterClientPage(driver);
 
+        JsonNode data = TestDataLoader.data().path("admin").path("registerValidCustomer");
+        String firstName = data.path("firstName").asText();
+        String lastName = data.path("lastName").asText();
+        String postCode = data.path("postCode").asText();
+
         adminLoginPage.navigateToAdminPanel();
         registerClientPage.openRegistrationForm();
-        registerClientPage.registerNewClient("James", "Mensah", "12345");
+        registerClientPage.registerNewClient(firstName, lastName, postCode);
 
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
         String alertText;
@@ -67,9 +74,14 @@ public class RegisterClientTest extends TestSetup {
         RegisterClientPage registerClientPage = new RegisterClientPage(driver);
         SoftAssert softAssert = new SoftAssert();
 
+        JsonNode data = TestDataLoader.data().path("admin").path("registerNumericName");
+        String firstName = data.path("firstName").asText();
+        String lastName = data.path("lastName").asText();
+        String postCode = data.path("postCode").asText();
+
         adminLoginPage.navigateToAdminPanel();
         registerClientPage.openRegistrationForm();
-        registerClientPage.registerNewClient("123", "Test", "12345");
+        registerClientPage.registerNewClient(firstName, lastName, postCode);
 
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(3));
         boolean alertAppeared;
@@ -108,9 +120,14 @@ public class RegisterClientTest extends TestSetup {
         RegisterClientPage registerClientPage = new RegisterClientPage(driver);
         SoftAssert softAssert = new SoftAssert();
 
+        JsonNode data = TestDataLoader.data().path("admin").path("registerAlphabeticPostcode");
+        String firstName = data.path("firstName").asText();
+        String lastName = data.path("lastName").asText();
+        String postCode = data.path("postCode").asText();
+
         adminLoginPage.navigateToAdminPanel();
         registerClientPage.openRegistrationForm();
-        registerClientPage.registerNewClient("James", "Mensah", "ABCDE");
+        registerClientPage.registerNewClient(firstName, lastName, postCode);
 
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(3));
         boolean alertAppeared;

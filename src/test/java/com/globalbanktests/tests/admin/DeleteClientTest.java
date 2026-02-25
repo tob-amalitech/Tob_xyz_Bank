@@ -3,6 +3,8 @@ package com.globalbanktests.tests.admin;
 import com.globalbanktests.base.TestSetup;
 import com.globalbanktests.pages.admin.AdminLoginPage;
 import com.globalbanktests.pages.admin.ClientListPage;
+import com.globalbanktests.tests.support.TestDataLoader;
+import com.fasterxml.jackson.databind.JsonNode;
 import io.qameta.allure.*;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -23,17 +25,20 @@ public class DeleteClientTest extends TestSetup {
         AdminLoginPage adminLoginPage = new AdminLoginPage(driver);
         ClientListPage clientListPage = new ClientListPage(driver);
 
+        JsonNode data = TestDataLoader.data().path("admin");
+        String customerName = data.path("searchCustomerName").asText();
+
         adminLoginPage.navigateToAdminPanel();
         clientListPage.openClientList();
 
         // Step 1: Search for the client
-        clientListPage.searchForClient("Hermoine");
+        clientListPage.searchForClient(customerName);
         int filteredCount = clientListPage.getCustomerRowCount();
 
         try {
             Assert.assertTrue(
                     filteredCount > 0,
-                    "Expected at least one row for customer 'Hermoine' before deletion, but none were found."
+                    "Expected at least one row for customer '" + customerName + "' before deletion, but none were found."
             );
         } catch (AssertionError assertionError) {
             clientListPage.captureScreenshot("Delete client - Hermoine not found before delete");

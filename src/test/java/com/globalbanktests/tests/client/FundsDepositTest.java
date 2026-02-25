@@ -3,6 +3,8 @@ package com.globalbanktests.tests.client;
 import com.globalbanktests.base.TestSetup;
 import com.globalbanktests.pages.client.ClientPortalPage;
 import com.globalbanktests.pages.client.FundsDepositPage;
+import com.globalbanktests.tests.support.TestDataLoader;
+import com.fasterxml.jackson.databind.JsonNode;
 import io.qameta.allure.*;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -14,9 +16,6 @@ import org.testng.annotations.Test;
 @Feature("Fund Management")
 public class FundsDepositTest extends TestSetup {
 
-    private static final String CUSTOMER_NAME = "Hermoine Granger";
-    private static final int DEPOSIT_AMOUNT = 500;
-
     @Test(priority = 1, description = "Verify a customer can successfully deposit funds")
     @Story("Deposit Funds - Positive Flow")
     @Severity(SeverityLevel.CRITICAL)
@@ -25,12 +24,16 @@ public class FundsDepositTest extends TestSetup {
         ClientPortalPage clientPortalPage = new ClientPortalPage(driver);
         FundsDepositPage fundsDepositPage = new FundsDepositPage(driver);
 
+        JsonNode customerNode = TestDataLoader.data().path("customer");
+        String customerName = customerNode.path("defaultCustomerName").asText();
+        int depositAmount = customerNode.path("deposit").path("happyAmount").asInt();
+
         clientPortalPage.enterClientPortal();
-        clientPortalPage.loginAsCustomer(CUSTOMER_NAME);
+        clientPortalPage.loginAsCustomer(customerName);
 
         int startingBalance = clientPortalPage.getCurrentBalance();
 
-        fundsDepositPage.makeDeposit(String.valueOf(DEPOSIT_AMOUNT));
+        fundsDepositPage.makeDeposit(String.valueOf(depositAmount));
         String successMessage = fundsDepositPage.getTransactionMessage();
 
         Assert.assertTrue(
@@ -41,8 +44,8 @@ public class FundsDepositTest extends TestSetup {
         int balanceAfterDeposit = clientPortalPage.getCurrentBalance();
         Assert.assertEquals(
                 balanceAfterDeposit,
-                startingBalance + DEPOSIT_AMOUNT,
-                "Balance should increase by " + DEPOSIT_AMOUNT + " after deposit."
+                startingBalance + depositAmount,
+                "Balance should increase by " + depositAmount + " after deposit."
         );
     }
 
@@ -56,14 +59,18 @@ public class FundsDepositTest extends TestSetup {
         ClientPortalPage clientPortalPage = new ClientPortalPage(driver);
         FundsDepositPage fundsDepositPage = new FundsDepositPage(driver);
 
+        JsonNode customerNode = TestDataLoader.data().path("customer");
+        String customerName = customerNode.path("defaultCustomerName").asText();
+        int negativeAmount = customerNode.path("deposit").path("negativeAmount").asInt();
+
         clientPortalPage.enterClientPortal();
-        clientPortalPage.loginAsCustomer(CUSTOMER_NAME);
+        clientPortalPage.loginAsCustomer(customerName);
 
         // Capture balance before negative deposit
         int startingBalance = clientPortalPage.getCurrentBalance();
 
         // Attempt negative deposit
-        fundsDepositPage.makeDeposit("-100");
+        fundsDepositPage.makeDeposit(String.valueOf(negativeAmount));
 
         // Capture balance after attempt
         int afterBalance = clientPortalPage.getCurrentBalance();

@@ -4,6 +4,8 @@ import com.globalbanktests.base.TestSetup;
 import com.globalbanktests.pages.client.ClientPortalPage;
 import com.globalbanktests.pages.client.FundsDepositPage;
 import com.globalbanktests.pages.client.FundsWithdrawalPage;
+import com.globalbanktests.tests.support.TestDataLoader;
+import com.fasterxml.jackson.databind.JsonNode;
 import io.qameta.allure.*;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -15,11 +17,6 @@ import org.testng.annotations.Test;
 @Feature("Fund Management")
 public class FundsWithdrawalTest extends TestSetup {
 
-    private static final String CUSTOMER_NAME = "Hermoine Granger";
-    private static final int PREPARE_BALANCE_DEPOSIT = 1000;
-    private static final int VALID_WITHDRAW_AMOUNT = 200;
-    private static final int INVALID_WITHDRAW_AMOUNT = 999999;
-
     @Test(priority = 2, description = "Verify a customer can successfully withdraw funds")
     @Story("Withdraw Funds - Positive Flow")
     @Severity(SeverityLevel.CRITICAL)
@@ -29,13 +26,18 @@ public class FundsWithdrawalTest extends TestSetup {
         FundsDepositPage fundsDepositPage = new FundsDepositPage(driver);
         FundsWithdrawalPage fundsWithdrawalPage = new FundsWithdrawalPage(driver);
 
+        JsonNode customerNode = TestDataLoader.data().path("customer");
+        String customerName = customerNode.path("defaultCustomerName").asText();
+        int prepareDeposit = customerNode.path("deposit").path("prepareBalanceAmount").asInt();
+        int validWithdraw = customerNode.path("withdrawal").path("validAmount").asInt();
+
         // Login
         clientPortalPage.enterClientPortal();
-        clientPortalPage.loginAsCustomer(CUSTOMER_NAME);
+        clientPortalPage.loginAsCustomer(customerName);
 
         // Ensure sufficient balance
         int balanceBefore = clientPortalPage.getCurrentBalance();
-        fundsDepositPage.makeDeposit(String.valueOf(PREPARE_BALANCE_DEPOSIT));
+        fundsDepositPage.makeDeposit(String.valueOf(prepareDeposit));
         String depositMessage = fundsDepositPage.getTransactionMessage();
         clientPortalPage.captureScreenshot("Pre-withdrawal deposit");
 
@@ -47,7 +49,7 @@ public class FundsWithdrawalTest extends TestSetup {
         int balanceAfterDeposit = clientPortalPage.getCurrentBalance();
 
         // Valid withdrawal
-        fundsWithdrawalPage.makeWithdrawal(String.valueOf(VALID_WITHDRAW_AMOUNT));
+        fundsWithdrawalPage.makeWithdrawal(String.valueOf(validWithdraw));
         String withdrawalMessage = fundsWithdrawalPage.getTransactionMessage();
         clientPortalPage.captureScreenshot("Withdrawal successful");
 
@@ -59,8 +61,8 @@ public class FundsWithdrawalTest extends TestSetup {
         int balanceAfterWithdrawal = clientPortalPage.getCurrentBalance();
         Assert.assertEquals(
                 balanceAfterWithdrawal,
-                balanceAfterDeposit - VALID_WITHDRAW_AMOUNT,
-                "Balance should decrease by " + VALID_WITHDRAW_AMOUNT + " after withdrawal."
+                balanceAfterDeposit - validWithdraw,
+                "Balance should decrease by " + validWithdraw + " after withdrawal."
         );
     }
 
@@ -72,12 +74,16 @@ public class FundsWithdrawalTest extends TestSetup {
         ClientPortalPage clientPortalPage = new ClientPortalPage(driver);
         FundsWithdrawalPage fundsWithdrawalPage = new FundsWithdrawalPage(driver);
 
+        JsonNode customerNode = TestDataLoader.data().path("customer");
+        String customerName = customerNode.path("defaultCustomerName").asText();
+        int invalidWithdraw = customerNode.path("withdrawal").path("insufficientAmount").asInt();
+
         // Login
         clientPortalPage.enterClientPortal();
-        clientPortalPage.loginAsCustomer(CUSTOMER_NAME);
+        clientPortalPage.loginAsCustomer(customerName);
 
         // Attempt to withdraw more than available balance
-        fundsWithdrawalPage.makeWithdrawal(String.valueOf(INVALID_WITHDRAW_AMOUNT));
+        fundsWithdrawalPage.makeWithdrawal(String.valueOf(invalidWithdraw));
         String insufficientMsg = fundsWithdrawalPage.getTransactionMessage();
         clientPortalPage.captureScreenshot("Withdrawal insufficient funds");
 
