@@ -25,6 +25,7 @@ public class AdminLoginPage extends AbstractPage {
     @FindBy(xpath = "//button[contains(text(),'Customers')]")
     private WebElement customersBtn;
 
+    // Constructor inherited from AbstractPage
     public AdminLoginPage(WebDriver driver) {
         super(driver);
     }

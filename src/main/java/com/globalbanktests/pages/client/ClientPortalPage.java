@@ -34,6 +34,7 @@ public class ClientPortalPage extends AbstractPage {
     @FindBy(xpath = "//div[contains(@class,'center')]//strong[2]")
     private WebElement balanceDisplay;
 
+    // constructor
     public ClientPortalPage(WebDriver driver) {
         super(driver);
     }
