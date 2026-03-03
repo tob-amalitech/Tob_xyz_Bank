@@ -16,6 +16,7 @@ import java.time.Duration;
  * visual debugging aids, and Allure reporting helpers used
  * throughout the test framework.
  */
+
 public abstract class AbstractPage {
 
     protected WebDriver driver;

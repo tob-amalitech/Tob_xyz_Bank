@@ -21,8 +21,6 @@ public class FundsDepositTest extends TestSetup {
     @Severity(SeverityLevel.CRITICAL)
     @TmsLink("TC-003")
     public void verifySuccessfulDeposit() {
-        ClientPortalPage clientPortalPage = new ClientPortalPage(driver);
-        FundsDepositPage fundsDepositPage = new FundsDepositPage(driver);
 
         JsonNode customerNode = TestDataLoader.data().path("customer");
         String customerName = customerNode.path("defaultCustomerName").asText();

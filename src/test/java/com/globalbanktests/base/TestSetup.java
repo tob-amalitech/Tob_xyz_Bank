@@ -1,5 +1,11 @@
 package com.globalbanktests.base;
 
+import com.globalbanktests.pages.admin.AdminLoginPage;
+import com.globalbanktests.pages.admin.ClientListPage;
+import com.globalbanktests.pages.client.ClientPortalPage;
+import com.globalbanktests.pages.client.FundsDepositPage;
+import com.globalbanktests.pages.client.FundsWithdrawalPage;
+import com.globalbanktests.pages.client.TransactionHistoryPage;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -17,6 +23,12 @@ import java.time.Duration;
 public class TestSetup {
 
     protected static WebDriver driver;
+    protected AdminLoginPage adminLoginPage;
+    protected ClientListPage clientListPage;
+    protected ClientPortalPage clientPortalPage;
+    protected FundsDepositPage fundsDepositPage;
+    protected FundsWithdrawalPage fundsWithdrawalPage;
+    protected TransactionHistoryPage transactionHistoryPage;
 
     private static final String APP_URL =
             "https://www.globalsqa.com/angularJs-protractor/BankingProject/#/login";
@@ -42,11 +54,20 @@ public class TestSetup {
         }
 
         WebDriverManager.chromedriver().setup();
+
         driver = new ChromeDriver(chromeOptions);
 
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(15));
         driver.get(APP_URL);
+
+        // Initialize page objects
+        adminLoginPage = new AdminLoginPage(driver);
+        clientListPage = new ClientListPage(driver);
+        clientPortalPage = new ClientPortalPage(driver);
+        fundsDepositPage = new FundsDepositPage(driver);
+        fundsWithdrawalPage = new FundsWithdrawalPage(driver);
+        transactionHistoryPage = new TransactionHistoryPage(driver);
     }
 
     @AfterMethod

@@ -16,6 +16,8 @@ public final class TestDataLoader {
     private static final ObjectMapper MAPPER = new ObjectMapper();
     private static final JsonNode ROOT;
 
+//This Java code snippet is a static initializer block in
+// the TestDataLoader class. It loads test data from a file on the classpath during class loading.
     static {
         try (InputStream is = TestDataLoader.class.getClassLoader().getResourceAsStream(DEFAULT_DATA_FILE)) {
             if (is == null) {

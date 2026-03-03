@@ -18,7 +18,6 @@ public class AdminLoginTest extends TestSetup {
     @Severity(SeverityLevel.CRITICAL)
     @Description("This test verifies that clicking the Bank Manager Login button on the home page successfully navigates the admin to the management dashboard.")
     public void verifyAdminLoginNavigation() {
-        AdminLoginPage adminLoginPage = new AdminLoginPage(driver);
         holdFor(1500);
         adminLoginPage.navigateToAdminPanel();
 

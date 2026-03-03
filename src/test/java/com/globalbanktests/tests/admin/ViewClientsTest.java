@@ -19,9 +19,6 @@ public class ViewClientsTest extends TestSetup {
     @Severity(SeverityLevel.NORMAL)
     @Description("This test verifies that a Bank Manager can navigate to the Customers section and see the full list of registered customers.")
     public void verifyClientListIsAccessible() {
-        AdminLoginPage adminLoginPage = new AdminLoginPage(driver);
-        ClientListPage clientListPage = new ClientListPage(driver);
-
         adminLoginPage.navigateToAdminPanel();
         clientListPage.openClientList();
 

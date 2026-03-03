@@ -26,7 +26,6 @@ public class OpenAccountTest extends TestSetup {
     @Severity(SeverityLevel.CRITICAL)
     @Description("This test verifies that a Bank Manager can create a new Dollar account for an existing customer by selecting the customer and currency from the Open Account form.")
     public void verifyAccountCreation() {
-        AdminLoginPage adminLoginPage = new AdminLoginPage(driver);
         OpenAccountPage openAccountPage = new OpenAccountPage(driver);
 
         JsonNode data = TestDataLoader.data().path("admin").path("openAccount");

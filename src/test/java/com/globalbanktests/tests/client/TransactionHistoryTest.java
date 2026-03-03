@@ -21,9 +21,6 @@ public class TransactionHistoryTest extends TestSetup {
     @Story("View Transaction History - Recent Deposit")
     @Severity(SeverityLevel.CRITICAL)
     public void verifyRecentDepositInTransactionHistory() {
-        ClientPortalPage clientPortalPage = new ClientPortalPage(driver);
-        FundsDepositPage fundsDepositPage = new FundsDepositPage(driver);
-        TransactionHistoryPage transactionHistoryPage = new TransactionHistoryPage(driver);
 
         JsonNode customerNode = TestDataLoader.data().path("customer");
         String customerName = customerNode.path("transactionHistoryCustomerName").asText();

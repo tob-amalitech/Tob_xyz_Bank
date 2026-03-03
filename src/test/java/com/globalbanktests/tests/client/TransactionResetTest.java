@@ -24,9 +24,6 @@ public class TransactionResetTest extends TestSetup {
     @Issue("BUG-004")
     @TmsLink("TC-004")
     public void verifyTransactionHistoryReset() {
-        ClientPortalPage clientPortalPage = new ClientPortalPage(driver);
-        FundsDepositPage fundsDepositPage = new FundsDepositPage(driver);
-        TransactionHistoryPage transactionHistoryPage = new TransactionHistoryPage(driver);
         SoftAssert softAssert = new SoftAssert();
 
         JsonNode customerNode = TestDataLoader.data().path("customer");

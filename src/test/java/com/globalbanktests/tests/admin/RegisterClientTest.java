@@ -27,7 +27,6 @@ public class RegisterClientTest extends TestSetup {
     @Severity(SeverityLevel.CRITICAL)
     @Description("This test verifies that a Bank Manager can successfully add a new customer by providing a first name, last name, and postal code through the admin dashboard.")
     public void verifyNewClientRegistration() {
-        AdminLoginPage adminLoginPage = new AdminLoginPage(driver);
         RegisterClientPage registerClientPage = new RegisterClientPage(driver);
 
         JsonNode data = TestDataLoader.data().path("admin").path("registerValidCustomer");

@@ -21,9 +21,6 @@ public class SearchClientTest extends TestSetup {
     @Severity(SeverityLevel.NORMAL)
     @Description("This test verifies that a Bank Manager can search for a specific customer by name and that the customers table filters correctly to show only matching results.")
     public void verifyClientSearch() {
-        AdminLoginPage adminLoginPage = new AdminLoginPage(driver);
-        ClientListPage clientListPage = new ClientListPage(driver);
-
         JsonNode data = TestDataLoader.data().path("admin");
         String searchName = data.path("searchCustomerName").asText();
 

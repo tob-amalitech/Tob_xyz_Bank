@@ -22,10 +22,6 @@ public class FundsWithdrawalTest extends TestSetup {
     @Severity(SeverityLevel.CRITICAL)
     public void verifyValidWithdrawal() {
 
-        ClientPortalPage clientPortalPage = new ClientPortalPage(driver);
-        FundsDepositPage fundsDepositPage = new FundsDepositPage(driver);
-        FundsWithdrawalPage fundsWithdrawalPage = new FundsWithdrawalPage(driver);
-
         JsonNode customerNode = TestDataLoader.data().path("customer");
         String customerName = customerNode.path("defaultCustomerName").asText();
         int prepareDeposit = customerNode.path("deposit").path("prepareBalanceAmount").asInt();

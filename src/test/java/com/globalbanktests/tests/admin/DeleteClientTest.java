@@ -22,9 +22,6 @@ public class DeleteClientTest extends TestSetup {
     @Description("This test verifies that a Bank Manager can locate a customer via the search bar and permanently remove them from the system using the Delete button.")
     public void verifyClientDeletion() {
 
-        AdminLoginPage adminLoginPage = new AdminLoginPage(driver);
-        ClientListPage clientListPage = new ClientListPage(driver);
-
         JsonNode data = TestDataLoader.data().path("admin");
         String customerName = data.path("searchCustomerName").asText();
 

@@ -20,7 +20,6 @@ public class ClientLoginTest extends TestSetup {
     @Severity(SeverityLevel.BLOCKER)
     @Description("This test verifies that a customer can access the client portal by clicking the Customer Login button and selecting their name from the dropdown.")
     public void verifyCustomerLogin() throws InterruptedException {
-        ClientPortalPage clientPortalPage = new ClientPortalPage(driver);
 
         JsonNode customerNode = TestDataLoader.data().path("customer");
         String customerName = customerNode.path("defaultCustomerName").asText();
